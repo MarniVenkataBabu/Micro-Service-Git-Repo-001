@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.venkat.auth.entity.Role;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +21,7 @@ public class JwtUtil {
 
 	private final long ACCESS_EXPIRY = 1000 * 60 * 15;
 
-	public String generateToken(String email, String role) {
+	public String generateToken(String email, Role role) {
 
 		return Jwts.builder()
 				.setSubject(email)
