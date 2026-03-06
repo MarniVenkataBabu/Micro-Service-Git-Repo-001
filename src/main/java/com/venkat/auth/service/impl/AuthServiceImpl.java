@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Normally we validate refresh token from DB or Redis
 
-        String newAccessToken = jwtUtil.generateToken("user@email.com", Role.USER);
+        String newAccessToken = jwtUtil.generateToken("user@email.com",Role.USER);
 
         return AuthResponse.builder()
                 .accessToken(newAccessToken)
