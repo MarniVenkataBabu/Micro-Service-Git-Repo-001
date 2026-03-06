@@ -13,24 +13,20 @@ import com.venkat.auth.service.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 @RestController
-
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
 	private final AuthService authService;
-	
+
 	@PostMapping("/register")
 	public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-		AuthResponse authResponse = authService.register(request);
-		return ResponseEntity.ok(authResponse);
+		return ResponseEntity.ok(authService.register(request));
 	}
-	
+
 	@PostMapping("/login")
-	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
-		AuthResponse authResponse = authService.login(request);
-		return ResponseEntity.ok(authResponse);
-		
+	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+		return ResponseEntity.ok(authService.login(request));
 	}
 }
