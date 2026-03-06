@@ -11,15 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthResponse {
+public class UserDto {
 
-    private String accessToken;
+    private Long id;
 
-    private String refreshToken;
+    private String name;
 
-    private String tokenType;
+    private String email;
 
-    private long expiresIn;
-
-    private UserDto user;
+    private Role role;
 }

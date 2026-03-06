@@ -35,6 +35,7 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
+	
+	@Column(columnDefinition = "TINYINT(1)")
 	private boolean enabled;
 }

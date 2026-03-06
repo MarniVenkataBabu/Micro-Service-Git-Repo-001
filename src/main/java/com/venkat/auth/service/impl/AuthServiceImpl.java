@@ -10,6 +10,7 @@ import com.venkat.auth.config.JwtUtil;
 import com.venkat.auth.dto.AuthResponse;
 import com.venkat.auth.dto.LoginRequest;
 import com.venkat.auth.dto.RegisterRequest;
+import com.venkat.auth.dto.UserDto;
 import com.venkat.auth.entity.Role;
 import com.venkat.auth.entity.User;
 import com.venkat.auth.repository.UserRepository;
@@ -71,6 +72,37 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+    @Override
+    public AuthResponse loginV2(LoginRequest request) {
+
+        User user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean passwordMatch = passwordEncoder
+                .matches(request.getPassword(), user.getPassword());
+
+        if (!passwordMatch) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
+        String refreshToken = UUID.randomUUID().toString();
+        
+        UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .expiresIn(900)
+                .user(userDto)
                 .build();
     }
 

@@ -37,7 +37,15 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+    // LOGIN USER VERSION 2
+    @PostMapping("/login/v2")
+    public ResponseEntity<AuthResponse> loginV2(
+            @Valid @RequestBody LoginRequest request) {
 
+        AuthResponse response = authService.loginV2(request);
+
+        return ResponseEntity.ok(response);
+    }
     // REFRESH TOKEN
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthResponse> refreshToken(
