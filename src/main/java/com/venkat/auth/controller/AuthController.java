@@ -1,11 +1,14 @@
 package com.venkat.auth.controller;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.venkat.auth.dto.AuthResponse;
 import com.venkat.auth.dto.LoginRequest;
 import com.venkat.auth.dto.RegisterRequest;
+import com.venkat.auth.dto.UserDto;
+import com.venkat.auth.entity.User;
 import com.venkat.auth.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -64,5 +67,13 @@ public class AuthController {
         authService.logout(refreshToken);
 
         return ResponseEntity.ok("Logged out successfully");
+    }
+    //MY INFORMTION
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
+
+     UserDto dto = authService.getCurrentUser(authentication);
+
+        return ResponseEntity.ok(dto);
     }
 }

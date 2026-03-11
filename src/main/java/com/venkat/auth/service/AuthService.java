@@ -1,8 +1,11 @@
 package com.venkat.auth.service;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+
 import com.venkat.auth.dto.AuthResponse;
 import com.venkat.auth.dto.LoginRequest;
 import com.venkat.auth.dto.RegisterRequest;
+import com.venkat.auth.dto.UserDto;
 
 public interface AuthService {
 
@@ -15,4 +18,6 @@ public interface AuthService {
 	AuthResponse refreshToken(String refreshToken);
 
 	void logout(String refreshToken);
+
+	UserDto getCurrentUser(Authentication authentication);
 }

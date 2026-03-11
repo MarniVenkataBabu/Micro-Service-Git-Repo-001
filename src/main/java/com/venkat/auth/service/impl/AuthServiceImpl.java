@@ -1,8 +1,11 @@
 package com.venkat.auth.service.impl;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+	private RedisTemplate<String, Object> redisTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -90,6 +94,12 @@ public class AuthServiceImpl implements AuthService {
 
         String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
         String refreshToken = UUID.randomUUID().toString();
+        // Store refresh token in Redis
+        redisTemplate.opsForValue().set(
+                "refresh_token:" + user.getEmail(),
+                refreshToken,
+                Duration.ofDays(7)
+        );
         
         UserDto userDto = UserDto.builder()
                 .id(user.getId())
@@ -127,4 +137,21 @@ public class AuthServiceImpl implements AuthService {
 
         System.out.println("User logged out with refresh token: " + refreshToken);
     }
+
+	@Override
+	public UserDto getCurrentUser(Authentication authentication) {
+		   String email = authentication.name();
+
+	        User user = userRepository
+	                .findByEmail(email)
+	                .orElseThrow();
+
+	        UserDto dto = UserDto.builder()
+	                .id(user.getId())
+	                .name(user.getName())
+	                .email(user.getEmail())
+	                .role(user.getRole())
+	                .build();
+		return dto;
+	}
 }
