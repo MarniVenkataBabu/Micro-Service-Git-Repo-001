@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
+	
+	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
